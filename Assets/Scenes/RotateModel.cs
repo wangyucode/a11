@@ -1,58 +1,71 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RotateModel : MonoBehaviour
 {
-    float rotationSpeed = 8;
-    float zoomSpeed = 40;
-
-    private float oldDistance;
+    float rotationSpeed =  Screen.width * 0.0125f;
 
     private int lastAction = 0;
 
     private Vector3 deltaVector = Vector3.zero;
-    private float passTime = 0;
-
-    private float lerpTime = 1f;
 
     private Vector2 startPos;
-    private string log = "";
 
-    private float loadSceneTime = -1;
-    private float loadSceneDelayTime = 1f;
+    public Material material;
+    public Material mat1;
+    public Material mat2;
+    public Material mat3;
+    public Material mat4;
 
-    private string loadSceneName;
+    public Transform DNATrans;
+    public Transform text1;
+    public Transform text2;
+    public Transform text3;
+    public Transform text4;
+    public Transform text5;
+    public Transform t1Top;
+    public Transform t1DNA;
+    public Transform t2Top;
+    public Transform t2DNA;
+    public Transform t3Top;
+    public Transform t3DNA;
+    public Transform t4Top;
+    public Transform t4DNA;
+    public Transform t5Top;
+    public Transform t5DNA;
 
-
-    private float smoth = 5;
-
-    public Transform cubeCameraTrans;
-    public Transform sphereCameraTrans;
-    public Transform capsuleCameraTrans;
-    public Transform returnCameraTrans;
-
+    public LineRenderer line1;
+    public LineRenderer line2;
+    public LineRenderer line3;
+    public LineRenderer line4;
+    public LineRenderer line5;
 
     [DllImport("__Internal")]
     private static extern void ShowLink(string link);
-    void Awake()
-    {
-        log = SceneManager.GetActiveScene().name;
-        Input.multiTouchEnabled = true;
-    }
+
 
     void Update()
     {
-        if (loadSceneTime > 0)
-        {
-            MoveCamera();
+        material.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
+        mat1.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
+        mat2.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
+        mat3.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
+        mat4.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
 
-            if (Time.time > loadSceneTime)
-            {
-                LoadScene();
-            }
-            return;
-        }
+        if(lastAction == 0) transform.Rotate(Vector3.up*Time.deltaTime*8f, Space.Self);
+
+        text1.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        text2.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        text3.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        text4.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        text5.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+
+        line1.SetPositions(new Vector3[]{t1Top.position, t1DNA.position});
+        line2.SetPositions(new Vector3[]{t2Top.position, t2DNA.position});
+        line3.SetPositions(new Vector3[]{t3Top.position, t3DNA.position});
+        line4.SetPositions(new Vector3[]{t4Top.position, t4DNA.position});
+        line5.SetPositions(new Vector3[]{t5Top.position, t5DNA.position});
+        
         if (Input.touches.Length == 1)
         {
             Touch touch = Input.GetTouch(0);
@@ -65,122 +78,28 @@ public class RotateModel : MonoBehaviour
                     if (lastAction == 0 || lastAction == 1)
                     {
                         deltaVector = touch.deltaPosition;
-                        Vector3 rotateVector = new Vector3(-deltaVector.y, deltaVector.x, 0) * Time.deltaTime * rotationSpeed;
-                        transform.Rotate(rotateVector, Space.World);
+                        Vector3 rotateVector = new Vector3(0, deltaVector.x, 0) * Time.deltaTime * rotationSpeed;
+                        transform.Rotate(rotateVector, Space.Self);
                         lastAction = 1;
-                        passTime = 0;
                     }
                     break;
                 case TouchPhase.Ended:
+                    lastAction = 0;
                     float distance = Vector2.Distance(touch.position, startPos);
                     if (distance < 10)
                     {
-                        log = "clicked";
                         Ray ray = Camera.main.ScreenPointToRay(touch.position);
                         RaycastHit hit;
                         if (Physics.Raycast(ray, out hit))
                         {
-                            log = hit.collider.gameObject.name;
-                            OnClicked(hit.collider.gameObject.name);
+                            ShowLink(hit.collider.gameObject.name);
                         }
-                    }
-                    else
-                    {
-                        log = "unclicked";
                     }
                     break;
             }
 
         }
-        else if (Input.touches.Length == 2)
-        {
-            if (Input.touches[0].phase == TouchPhase.Moved || Input.touches[2].phase == TouchPhase.Moved)
-            {
-                float newDistance = Vector2.Distance(Input.touches[0].position, Input.touches[1].position);
-                if (newDistance > oldDistance)
-                {
-                    Camera.main.fieldOfView -= zoomSpeed * Time.deltaTime;
-                }
-                else
-                {
-                    Camera.main.fieldOfView += zoomSpeed * Time.deltaTime;
-                }
-                oldDistance = newDistance;
-                lastAction = 2;
-                passTime = lerpTime;
-            }
-        }
-        else if (Input.touches.Length == 0)
-        {
-            if (passTime < lerpTime)
-            {
-                deltaVector = Vector2.Lerp(deltaVector, Vector2.zero, Time.deltaTime * smoth);
-                Vector3 rotateVector = new Vector3(-deltaVector.y, deltaVector.x, 0) * Time.deltaTime * rotationSpeed;
-                transform.Rotate(rotateVector, Space.World);
-                passTime += Time.deltaTime;
-            }
-            lastAction = 0;
-        }
 
     }
 
-    private void MoveCamera()
-    {
-        Transform targetTransform = Camera.main.gameObject.transform;
-        switch (loadSceneName)
-        {
-            case "CubeScene":
-                targetTransform = cubeCameraTrans;
-                break;
-            case "CapsuleScene":
-                targetTransform = capsuleCameraTrans;
-                break;
-            case "SphereScene":
-                targetTransform = sphereCameraTrans;
-                break;
-            case "MainScene":
-                targetTransform = returnCameraTrans;
-                break;
-
-        }
-        Vector3 position = Camera.main.gameObject.transform.position;
-        Camera.main.gameObject.transform.position = Vector3.Lerp(position, targetTransform.position, Time.deltaTime * smoth);
-        Quaternion rotation = Camera.main.gameObject.transform.rotation;
-        Camera.main.gameObject.transform.rotation = Quaternion.Lerp(rotation, targetTransform.rotation, Time.deltaTime * smoth);
-    }
-
-    private void OnClicked(string name)
-    {
-        loadSceneTime = Time.time + loadSceneDelayTime;
-        switch (name)
-        {
-            case "Cube":
-                loadSceneName = "CubeScene";
-                break;
-            case "Capsule":
-
-                loadSceneName = "CapsuleScene";
-                break;
-            case "Sphere":
-                loadSceneName = "SphereScene";
-                break;
-
-            default:
-                loadSceneTime = -1;
-                ShowLink(name);
-                break;
-        }
-    }
-
-    void LoadScene()
-    {
-        log = "LoadCubeScene";
-        SceneManager.LoadScene(loadSceneName);
-    }
-
-    public void back()
-    {
-        loadSceneTime = Time.time + loadSceneDelayTime;
-        loadSceneName = "MainScene";
-    }
 }

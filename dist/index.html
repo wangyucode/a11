@@ -75,19 +75,24 @@
         #return-btn:hover:active:focus {
             background-color: #0d6ba3;
         }
+
+        #sound{
+            visibility: hidden;
+        }
     </style>
 </head>
 
 <body>
-    <canvas id="unity-canvas" width=375 height=812></canvas>
+    <audio id="sound" autoplay="true" preload="auto" loop="true">
+        <source src="beyond-beliefs.mp3" type="audio/mpeg" />
+    </audio>
+    <canvas id="unity-canvas" width=720 height=1080></canvas>
     <div id="index-loading">
         <img src="loading.gif" />
     </div>
     <div id="landing-page">
         <button id="return-btn">X</button>
-        <div id="images-container">
-
-        </div>
+        <div id="images-container"></div>
     </div>
 
     <script>
@@ -96,15 +101,28 @@
         var returnBtn = document.querySelector("#return-btn");
         var imageContainer = document.querySelector("#images-container");
         var landingPage = document.querySelector("#landing-page")
+        var sound = document.querySelector("#sound")
 
         window.landingData = {
-            cube: [
-                { tag: 'img', url: 'cube/1.jpg' },
-                { tag: 'a', url: 'https://www.baidu.com/', text: 'https://www.baidu.com/' },
-                { tag: 'a', url: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png', text: '图片链接' },
-                { tag: 'a', url: 'https://mp.weixin.qq.com/s?__biz=MjM5ODMzMDMyMw==&mid=2653641031&idx=1&sn=18137d51b122012a5da261780777316a&chksm=bd1393fb8a641aedf938daa8bd4b1ef5138f29ff12a1de9d14f1fb6cb9e62b028de5f224e293&mpshare=1&scene=1&srcid=0116xHXqvl9oSJ70OqFqlSyN&sharer_sharetime=1642331858426&sharer_shareid=7b493df2154d9ba5d6790806c83f8122#rd', text: '公众号链接' },
-                { tag: 'img', url: 'cube/roll.jpg' }
+            text1: [
+                { tag: 'img', url: 'landing/pepper.jpeg' },
+                // { tag: 'a', url: 'https://www.baidu.com/', text: 'https://www.baidu.com/' },
+                // { tag: 'a', url: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png', text: '图片链接' },
+                // { tag: 'a', url: 'https://mp.weixin.qq.com/s?__biz=MjM5ODMzMDMyMw==&mid=2653641031&idx=1&sn=18137d51b122012a5da261780777316a&chksm=bd1393fb8a641aedf938daa8bd4b1ef5138f29ff12a1de9d14f1fb6cb9e62b028de5f224e293&mpshare=1&scene=1&srcid=0116xHXqvl9oSJ70OqFqlSyN&sharer_sharetime=1642331858426&sharer_shareid=7b493df2154d9ba5d6790806c83f8122#rd', text: '公众号链接' },
+                // { tag: 'img', url: 'cube/roll.jpg' }
             ],
+            text2: [
+                { tag: 'img', url: 'landing/vial.jpeg' }
+            ],
+            text3: [
+                { tag: 'img', url: 'landing/ex.jpeg' }
+            ],
+            text4: [
+                { tag: 'img', url: 'landing/pi.jpeg' }
+            ],
+            text5: [
+                { tag: 'img', url: 'landing/j.jpeg' }
+            ]
         }
 
         returnBtn.addEventListener('click', function () {
@@ -113,6 +131,14 @@
                 imageContainer.removeChild(imageContainer.lastElementChild);
             }
         });
+
+        var playSound = function(){
+            sound.load();
+            sound.play();
+            window.removeEventListener('touchend', playSound)
+        }
+
+        window.addEventListener('touchend', playSound);
 
         var buildUrl = "Build";
         var loaderUrl = buildUrl + "/dist.loader.js";
@@ -164,7 +190,9 @@
                 //   progressBarFull.style.width = 100 * progress + "%";
                 console.log(progress);
             }).then((unityInstance) => {
-                loading.style.display = "none";
+                setTimeout(()=>{
+                    loading.style.display = "none";
+                }, 2000);
             }).catch((message) => {
                 alert(message);
             });
