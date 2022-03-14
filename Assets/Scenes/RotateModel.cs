@@ -43,6 +43,13 @@ public class RotateModel : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void ShowLink(string link);
 
+    void OnDrawGizmos() {
+        Gizmos.DrawLine(t1Top.position, t1DNA.position);
+        Gizmos.DrawLine(t2Top.position, t2DNA.position);
+        Gizmos.DrawLine(t3Top.position, t3DNA.position);
+        Gizmos.DrawLine(t4Top.position, t4DNA.position);
+        Gizmos.DrawLine(t5Top.position, t5DNA.position);
+    }
 
     void Update()
     {
@@ -54,11 +61,13 @@ public class RotateModel : MonoBehaviour
 
         if(lastAction == 0) transform.Rotate(Vector3.up*Time.deltaTime*8f, Space.Self);
 
-        text1.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        text2.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        text3.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        text4.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        text5.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        // text1.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        // text2.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        // text3.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        // text4.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        // text5.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+
+        
 
         line1.SetPositions(new Vector3[]{t1Top.position, t1DNA.position});
         line2.SetPositions(new Vector3[]{t2Top.position, t2DNA.position});
