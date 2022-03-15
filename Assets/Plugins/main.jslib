@@ -24,23 +24,7 @@ mergeInto(LibraryManager.library, {
             });
         }
 
-        switch (link) {
-            case 'text1':
-                appendElement(window.landingData.text1);
-                break;
-            case 'text2':
-                appendElement(window.landingData.text2);
-                break;
-            case 'text3':
-                appendElement(window.landingData.text3);
-                break;
-            case 'text4':
-                appendElement(window.landingData.text4);
-                break;
-            case 'text5':
-                appendElement(window.landingData.text5);
-                break;
-        }
+        if (window.landingData[link]) appendElement(window.landingData[link]);
     },
 
 });

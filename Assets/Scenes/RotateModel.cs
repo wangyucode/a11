@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RotateModel : MonoBehaviour
 {
-    float rotationSpeed =  Screen.width * 0.0125f;
+    float rotationSpeed = Screen.width * 0.0125f;
 
     private int lastAction = 0;
 
@@ -43,7 +43,8 @@ public class RotateModel : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void ShowLink(string link);
 
-    void OnDrawGizmos() {
+    void OnDrawGizmos()
+    {
         Gizmos.DrawLine(t1Top.position, t1DNA.position);
         Gizmos.DrawLine(t2Top.position, t2DNA.position);
         Gizmos.DrawLine(t3Top.position, t3DNA.position);
@@ -53,28 +54,20 @@ public class RotateModel : MonoBehaviour
 
     void Update()
     {
-        material.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
-        mat1.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
-        mat2.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
-        mat3.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
-        mat4.mainTextureOffset = new Vector2(Time.time* 0.005f, Time.time* 0.009f);
+        material.mainTextureOffset = new Vector2(Time.time * 0.005f, Time.time * 0.009f);
+        mat1.mainTextureOffset = new Vector2(Time.time * 0.005f, Time.time * 0.009f);
+        mat2.mainTextureOffset = new Vector2(Time.time * 0.005f, Time.time * 0.009f);
+        mat3.mainTextureOffset = new Vector2(Time.time * 0.005f, Time.time * 0.009f);
+        mat4.mainTextureOffset = new Vector2(Time.time * 0.005f, Time.time * 0.009f);
 
-        if(lastAction == 0) transform.Rotate(Vector3.up*Time.deltaTime*8f, Space.Self);
+        if (lastAction == 0) transform.Rotate(Vector3.up * Time.deltaTime * 8f, Space.Self);
 
-        // text1.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        // text2.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        // text3.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        // text4.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
-        // text5.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
+        line1.SetPositions(new Vector3[] { t1Top.position, t1DNA.position });
+        line2.SetPositions(new Vector3[] { t2Top.position, t2DNA.position });
+        line3.SetPositions(new Vector3[] { t3Top.position, t3DNA.position });
+        line4.SetPositions(new Vector3[] { t4Top.position, t4DNA.position });
+        line5.SetPositions(new Vector3[] { t5Top.position, t5DNA.position });
 
-        
-
-        line1.SetPositions(new Vector3[]{t1Top.position, t1DNA.position});
-        line2.SetPositions(new Vector3[]{t2Top.position, t2DNA.position});
-        line3.SetPositions(new Vector3[]{t3Top.position, t3DNA.position});
-        line4.SetPositions(new Vector3[]{t4Top.position, t4DNA.position});
-        line5.SetPositions(new Vector3[]{t5Top.position, t5DNA.position});
-        
         if (Input.touches.Length == 1)
         {
             Touch touch = Input.GetTouch(0);
