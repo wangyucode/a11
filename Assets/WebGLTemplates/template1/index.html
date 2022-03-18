@@ -102,9 +102,7 @@
 </head>
 
 <body>
-    <audio id="sound" autoplay="true" preload="auto" loop="true">
-        <source src="beyond-beliefs.mp3" type="audio/mpeg" />
-    </audio>
+    <audio id="sound" autoplay="true" preload="auto" loop="true" src="beyond-beliefs.mp3"></audio>
     <canvas id="unity-canvas" width=720 height=1080></canvas>
     <div id="index-loading">
         <img id="loading-cicle" src="cicle.png" />
@@ -114,114 +112,7 @@
         <button id="return-btn"></button>
         <div id="images-container"></div>
     </div>
-
-    <script>
-        var canvas = document.querySelector("#unity-canvas");
-        var loading = document.querySelector("#index-loading");
-        var returnBtn = document.querySelector("#return-btn");
-        var imageContainer = document.querySelector("#images-container");
-        var landingPage = document.querySelector("#landing-page")
-        var sound = document.querySelector("#sound")
-
-        window.landingData = {
-            text1: [
-                { tag: 'img', url: 'landing/pepper.jpeg' },
-                // { tag: 'a', url: 'https://www.baidu.com/', text: 'https://www.baidu.com/' },
-                // { tag: 'a', url: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png', text: '图片链接' },
-                // { tag: 'a', url: 'https://mp.weixin.qq.com/s?__biz=MjM5ODMzMDMyMw==&mid=2653641031&idx=1&sn=18137d51b122012a5da261780777316a&chksm=bd1393fb8a641aedf938daa8bd4b1ef5138f29ff12a1de9d14f1fb6cb9e62b028de5f224e293&mpshare=1&scene=1&srcid=0116xHXqvl9oSJ70OqFqlSyN&sharer_sharetime=1642331858426&sharer_shareid=7b493df2154d9ba5d6790806c83f8122#rd', text: '公众号链接' },
-                // { tag: 'img', url: 'cube/roll.jpg' }
-            ],
-            text2: [
-                { tag: 'img', url: 'landing/vial.jpeg' }
-            ],
-            text3: [
-                { tag: 'img', url: 'landing/ex.jpeg' }
-            ],
-            text4: [
-                { tag: 'img', url: 'landing/pi.jpeg' }
-            ],
-            text5: [
-                { tag: 'img', url: 'landing/j.jpeg' }
-            ],
-            A11: [
-                { tag: 'img', url: 'landing/A11.jpeg' }
-            ]
-        }
-
-        returnBtn.addEventListener('click', function () {
-            landingPage.style.display = 'none';
-            while (imageContainer.lastElementChild) {
-                imageContainer.removeChild(imageContainer.lastElementChild);
-            }
-        });
-
-        var playSound = function () {
-            sound.load();
-            sound.play();
-            window.removeEventListener('touchend', playSound)
-        }
-
-        window.addEventListener('touchend', playSound);
-
-        var buildUrl = "Build";
-        var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
-        var config = {
-            dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
-            frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
-            codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "wycode",
-            productName: "a11",
-            productVersion: "0.1"
-        };
-
-        // By default Unity keeps WebGL canvas render target size matched with
-        // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-        // Set this to false if you want to decouple this synchronization from
-        // happening inside the engine, and you would instead like to size up
-        // the canvas DOM size and WebGL render target sizes yourself.
-        // config.matchWebGLToCanvasSize = false;
-
-        //   if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        //     // Mobile device style: fill the whole browser client area with the game canvas:
-
-        //     var meta = document.createElement('meta');
-        //     meta.name = 'viewport';
-        //     meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        //     document.getElementsByTagName('head')[0].appendChild(meta);
-        //     container.className = "unity-mobile";
-
-        //     // To lower canvas resolution on mobile devices to gain some
-        //     // performance, uncomment the following line:
-        //     // config.devicePixelRatio = 1;
-
-        //     canvas.style.width = window.innerWidth + 'px';
-        //     canvas.style.height = window.innerHeight + 'px';
-
-        //     unityShowBanner('WebGL builds are not supported on mobile devices.');
-        //   } else {
-        //     // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-
-        //     canvas.style.width = "960px";
-        //     canvas.style.height = "600px";
-        //   }
-
-        var script = document.createElement("script");
-        script.src = loaderUrl;
-        script.onload = () => {
-            createUnityInstance(canvas, config, (progress) => {
-                //   progressBarFull.style.width = 100 * progress + "%";
-                console.log(progress);
-            }).then((unityInstance) => {
-                setTimeout(() => {
-                    loading.style.display = "none";
-                }, 2000);
-            }).catch((message) => {
-                alert(message);
-            });
-        }
-        document.body.appendChild(script);
-    </script>
+    <script src="main.js"></script>
 </body>
 
 </html>
