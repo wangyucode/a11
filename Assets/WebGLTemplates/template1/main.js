@@ -84,11 +84,11 @@ sound.addEventListener('canplay', function () {
 window.addEventListener('touchend', playSound);
 
 var buildUrl = "Build";
-var loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+var loaderUrl = buildUrl + "/dist.loader.js";
 var config = {
-    dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
-    frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
-    codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+    dataUrl: buildUrl + "/dist.data.gz",
+    frameworkUrl: buildUrl + "/dist.framework.js.gz",
+    codeUrl: buildUrl + "/dist.wasm.gz",
     streamingAssetsUrl: "StreamingAssets",
     companyName: "wycode",
     productName: "a11",
@@ -141,3 +141,31 @@ script.onload = () => {
     });
 }
 document.body.appendChild(script);
+
+function setWx(data) {
+    const options = {
+        debug: false,
+        appId: 'wx3b83169608cd3771',
+        jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData'],
+        timestamp: data.timestamp,
+        nonceStr: data.nonceStr,
+        signature: data.signature
+    };
+    wx.config(options);
+
+    wx.ready(function () {
+        const shareData = {
+            title: '未来基因 Recasting..',
+            desc: '破解娱乐公式，释放束缚的DNA，在未来青年 Center A11 in!',
+            link: 'http://a11.wycode.cn/',
+            imgUrl: 'http://a11.wycode.cn/logo.jpg'
+        }
+        wx.updateAppMessageShareData(shareData);
+        wx.updateTimelineShareData(shareData);
+    });
+
+}
+
+fetch("http://wycode.cn:8081/sign")
+    .then(response => response.json())
+    .then(data => data && data.success && setWx(data.payload));
