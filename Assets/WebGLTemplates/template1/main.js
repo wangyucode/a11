@@ -145,11 +145,8 @@ document.body.appendChild(script);
 function setWx(data) {
     const options = {
         debug: false,
-        appId: 'wx3b83169608cd3771',
         jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData'],
-        timestamp: data.timestamp,
-        nonceStr: data.nonceStr,
-        signature: data.signature
+        ...data
     };
     wx.config(options);
 
@@ -157,8 +154,8 @@ function setWx(data) {
         const shareData = {
             title: '未来基因 Recasting..',
             desc: '破解娱乐公式，释放束缚的DNA，在未来青年 Center A11 in!',
-            link: 'http://a11.wycode.cn/',
-            imgUrl: 'http://a11.wycode.cn/logo.jpg'
+            link: location.href,
+            imgUrl: `${location.href}/logo.jpg`
         }
         wx.updateAppMessageShareData(shareData);
         wx.updateTimelineShareData(shareData);
@@ -166,6 +163,6 @@ function setWx(data) {
 
 }
 
-fetch("http://wycode.cn:8081/sign")
+fetch(`https://wycode.cn/node/a11/sign?url=${location.href}`)
     .then(response => response.json())
     .then(data => data && data.success && setWx(data.payload));
